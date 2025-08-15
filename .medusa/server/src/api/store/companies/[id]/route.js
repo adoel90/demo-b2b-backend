@@ -1,0 +1,45 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DELETE = exports.POST = exports.GET = void 0;
+const utils_1 = require("@medusajs/utils");
+const workflows_1 = require("../../../../workflows/company/workflows/");
+const GET = async (req, res) => {
+    const query = req.scope.resolve(utils_1.ContainerRegistrationKeys.QUERY);
+    const { id } = req.params;
+    const { data } = await query.graph({
+        entity: "companies",
+        fields: req.queryConfig.fields,
+        filters: { id },
+    }, { throwIfKeyNotFound: true });
+    res.json({ company: data[0] });
+};
+exports.GET = GET;
+const POST = async (req, res) => {
+    const { id } = req.params;
+    const query = req.scope.resolve(utils_1.ContainerRegistrationKeys.QUERY);
+    await workflows_1.updateCompaniesWorkflow.run({
+        input: {
+            id,
+            ...req.body,
+        },
+        container: req.scope,
+    });
+    const { data: [company], } = await query.graph({
+        entity: "companies",
+        fields: req.queryConfig.fields,
+        filters: { id },
+    }, { throwIfKeyNotFound: true });
+    res.json({ company });
+};
+exports.POST = POST;
+const DELETE = async (req, res) => {
+    const { id } = req.params;
+    await workflows_1.deleteCompaniesWorkflow.run({
+        input: { id },
+        container: req.scope,
+        throwOnError: true,
+    });
+    res.status(204).send();
+};
+exports.DELETE = DELETE;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicm91dGUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi9zcmMvYXBpL3N0b3JlL2NvbXBhbmllcy9baWRdL3JvdXRlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUNBLDJDQUE0RDtBQUM1RCx3RUFHa0Q7QUFNM0MsTUFBTSxHQUFHLEdBQUcsS0FBSyxFQUN0QixHQUE2QyxFQUM3QyxHQUFtQixFQUNuQixFQUFFO0lBQ0YsTUFBTSxLQUFLLEdBQUcsR0FBRyxDQUFDLEtBQUssQ0FBQyxPQUFPLENBQUMsaUNBQXlCLENBQUMsS0FBSyxDQUFDLENBQUM7SUFDakUsTUFBTSxFQUFFLEVBQUUsRUFBRSxHQUFHLEdBQUcsQ0FBQyxNQUFNLENBQUM7SUFFMUIsTUFBTSxFQUFFLElBQUksRUFBRSxHQUFHLE1BQU0sS0FBSyxDQUFDLEtBQUssQ0FDaEM7UUFDRSxNQUFNLEVBQUUsV0FBVztRQUNuQixNQUFNLEVBQUUsR0FBRyxDQUFDLFdBQVcsQ0FBQyxNQUFNO1FBQzlCLE9BQU8sRUFBRSxFQUFFLEVBQUUsRUFBRTtLQUNoQixFQUNELEVBQUUsa0JBQWtCLEVBQUUsSUFBSSxFQUFFLENBQzdCLENBQUM7SUFFRixHQUFHLENBQUMsSUFBSSxDQUFDLEVBQUUsT0FBTyxFQUFFLElBQUksQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUM7QUFDakMsQ0FBQyxDQUFDO0FBakJXLFFBQUEsR0FBRyxPQWlCZDtBQUVLLE1BQU0sSUFBSSxHQUFHLEtBQUssRUFDdkIsR0FBMEMsRUFDMUMsR0FBbUIsRUFDbkIsRUFBRTtJQUNGLE1BQU0sRUFBRSxFQUFFLEVBQUUsR0FBRyxHQUFHLENBQUMsTUFBTSxDQUFDO0lBQzFCLE1BQU0sS0FBSyxHQUFHLEdBQUcsQ0FBQyxLQUFLLENBQUMsT0FBTyxDQUFDLGlDQUF5QixDQUFDLEtBQUssQ0FBQyxDQUFDO0lBRWpFLE1BQU0sbUNBQXVCLENBQUMsR0FBRyxDQUFDO1FBQ2hDLEtBQUssRUFBRTtZQUNMLEVBQUU7WUFDRixHQUFHLEdBQUcsQ0FBQyxJQUFJO1NBQ1o7UUFDRCxTQUFTLEVBQUUsR0FBRyxDQUFDLEtBQUs7S0FDckIsQ0FBQyxDQUFDO0lBRUgsTUFBTSxFQUNKLElBQUksRUFBRSxDQUFDLE9BQU8sQ0FBQyxHQUNoQixHQUFHLE1BQU0sS0FBSyxDQUFDLEtBQUssQ0FDbkI7UUFDRSxNQUFNLEVBQUUsV0FBVztRQUNuQixNQUFNLEVBQUUsR0FBRyxDQUFDLFdBQVcsQ0FBQyxNQUFNO1FBQzlCLE9BQU8sRUFBRSxFQUFFLEVBQUUsRUFBRTtLQUNoQixFQUNELEVBQUUsa0JBQWtCLEVBQUUsSUFBSSxFQUFFLENBQzdCLENBQUM7SUFFRixHQUFHLENBQUMsSUFBSSxDQUFDLEVBQUUsT0FBTyxFQUFFLENBQUMsQ0FBQztBQUN4QixDQUFDLENBQUM7QUEzQlcsUUFBQSxJQUFJLFFBMkJmO0FBRUssTUFBTSxNQUFNLEdBQUcsS0FBSyxFQUFFLEdBQWtCLEVBQUUsR0FBbUIsRUFBRSxFQUFFO0lBQ3RFLE1BQU0sRUFBRSxFQUFFLEVBQUUsR0FBRyxHQUFHLENBQUMsTUFBTSxDQUFDO0lBRTFCLE1BQU0sbUNBQXVCLENBQUMsR0FBRyxDQUFDO1FBQ2hDLEtBQUssRUFBRSxFQUFFLEVBQUUsRUFBRTtRQUNiLFNBQVMsRUFBRSxHQUFHLENBQUMsS0FBSztRQUNwQixZQUFZLEVBQUUsSUFBSTtLQUNuQixDQUFDLENBQUM7SUFFSCxHQUFHLENBQUMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLElBQUksRUFBRSxDQUFDO0FBQ3pCLENBQUMsQ0FBQztBQVZXLFFBQUEsTUFBTSxVQVVqQiJ9
