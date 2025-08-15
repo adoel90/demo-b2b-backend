@@ -1,7 +1,5 @@
 [build]
 # Tidak perlu build ulang, cukup install dependency dari hasil `medusa build`
-#builder = "NIXPACKS"
-#nixPkgs = ["nodejs", "yarn"]
 command = "cd .medusa/server && npm install --omit=dev"
 
 [deploy]
