@@ -23,5 +23,6 @@ build
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+/integration-tests
 
 .medusa
