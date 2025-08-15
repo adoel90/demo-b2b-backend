@@ -1,0 +1,7 @@
+[build]
+# Tidak perlu build ulang, cukup install dependency dari hasil `medusa build`
+command = "cd .medusa/server && npm install --omit=dev"
+
+[deploy]
+# Jalankan server yang sudah ter-bundle
+start = "cd .medusa/server && npm run predeploy && npm run start"
